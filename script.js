@@ -80,6 +80,38 @@ function updateTheme() {
     document.body.style.backgroundColor = darkMode ? DARK_BG : LIGHT_BG;
     canvas.style.borderColor = darkMode ? DARK_FG : LIGHT_FG;
     document.getElementById('instructions').style.color = darkMode ? DARK_FG : LIGHT_FG;
+    // Update mobile controls styling
+    const mobileControls = document.getElementById('mobileControls');
+    if (mobileControls) {
+        if (darkMode) {
+            mobileControls.classList.add('dark');
+            mobileControls.classList.remove('light');
+        } else {
+            mobileControls.classList.add('light');
+            mobileControls.classList.remove('dark');
+        }
+        // Buttons
+        const btns = mobileControls.querySelectorAll('.mobileBtn, #jumpButton');
+        btns.forEach(btn => {
+            if (darkMode) {
+                if (btn.id === 'jumpButton') {
+                    btn.style.background = '#2e7d32';
+                    btn.style.color = '#fff';
+                } else {
+                    btn.style.background = '#2b2b2b';
+                    btn.style.color = '#f1f1f1';
+                }
+            } else {
+                if (btn.id === 'jumpButton') {
+                    btn.style.background = '#4CAF50';
+                    btn.style.color = '#fff';
+                } else {
+                    btn.style.background = '#1976d2';
+                    btn.style.color = '#fff';
+                }
+            }
+        });
+    }
 }
 
 updateTheme(); // Initial theme set
@@ -418,6 +450,14 @@ addClickAndTouch(darkToggleBtn, () => {
     saveSettings(settings);
     updateTheme();
 });
+
+// Keep button labels visually aligned with keyboard hints
+// (Optional accessibility: set aria-labels)
+if (diffNormal) diffNormal.setAttribute('aria-label', '1 - Normal');
+if (diffFast) diffFast.setAttribute('aria-label', '2 - Fast');
+if (diffUltra) diffUltra.setAttribute('aria-label', '3 - Ultra');
+if (restartButton) restartButton.setAttribute('aria-label', 'R - Restart');
+if (darkToggleBtn) darkToggleBtn.setAttribute('aria-label', 'D - Theme');
 
 // =====================
 // START GAME

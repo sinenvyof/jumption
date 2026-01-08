@@ -93,12 +93,12 @@
         <p>Mobile: Tap the screen or use the jump button below.</p>
     </div>
     <div id="mobileControls">
-        <button id="diffNormal" class="mobileBtn">Normal</button>
-        <button id="diffFast" class="mobileBtn">Fast</button>
-        <button id="diffUltra" class="mobileBtn">Ultra</button>
+        <button id="diffNormal" class="mobileBtn" title="1 - Normal">1</button>
+        <button id="diffFast" class="mobileBtn" title="2 - Fast">2</button>
+        <button id="diffUltra" class="mobileBtn" title="3 - Ultra">3</button>
         <button id="jumpButton">JUMP</button>
-        <button id="restartButton" class="mobileBtn">Restart</button>
-        <button id="darkToggle" class="mobileBtn">Theme</button>
+        <button id="restartButton" class="mobileBtn" title="R - Restart">R</button>
+        <button id="darkToggle" class="mobileBtn" title="D - Theme">D</button>
     </div>
     <style>
         .mobileBtn {
@@ -106,12 +106,20 @@
             font-size: 16px;
             border: none;
             border-radius: 8px;
-            background:#1976d2;
-            color:#fff;
+            background: #2b2b2b; /* dark default */
+            color: #f1f1f1;
             touch-action: manipulation;
         }
-        #jumpButton { padding: 12px 16px; background: #4CAF50; }
+        #jumpButton { padding: 12px 16px; background: #2e7d32; color: #fff; }
         .mobileBtn:active, #jumpButton:active { transform: translateY(1px); }
+        #mobileControls.dark {
+            background: rgba(30,30,30,0.95);
+            color: #eaeaea;
+        }
+        #mobileControls.light {
+            background: rgba(255,255,255,0.95);
+            color: #111;
+        }
     </style>
     <script src="script.js"></script>
 </body>
