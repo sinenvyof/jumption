@@ -60,8 +60,20 @@
                 font-size: 12px;
             }
             #mobileControls {
-                display: block;
+                display: flex;
+                position: fixed;
+                left: 50%;
+                transform: translateX(-50%);
+                bottom: 12px;
+                gap: 8px;
+                z-index: 1000;
+                align-items: center;
+                padding: 6px;
+                background: rgba(255,255,255,0.85);
+                border-radius: 12px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.15);
             }
+            #instructions { margin-bottom: 64px; }
         }
 
         @media (max-height: 500px) {
@@ -81,8 +93,26 @@
         <p>Mobile: Tap the screen or use the jump button below.</p>
     </div>
     <div id="mobileControls">
+        <button id="diffNormal" class="mobileBtn">Normal</button>
+        <button id="diffFast" class="mobileBtn">Fast</button>
+        <button id="diffUltra" class="mobileBtn">Ultra</button>
         <button id="jumpButton">JUMP</button>
+        <button id="restartButton" class="mobileBtn">Restart</button>
+        <button id="darkToggle" class="mobileBtn">Theme</button>
     </div>
+    <style>
+        .mobileBtn {
+            padding: 10px 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            background:#1976d2;
+            color:#fff;
+            touch-action: manipulation;
+        }
+        #jumpButton { padding: 12px 16px; background: #4CAF50; }
+        .mobileBtn:active, #jumpButton:active { transform: translateY(1px); }
+    </style>
     <script src="script.js"></script>
 </body>
 </html>

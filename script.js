@@ -298,29 +298,11 @@ function gameLoop(currentTime) {
 document.addEventListener('keydown', (event) => {
     if (gameState === 'start') {
         if (event.key === '1') {
-            speed = NORMAL_SPEED;
-            speedInc = NORMAL_INCREASE;
-            gameState = 'playing';
-            rectangle = new Rectangle();
-            cacti = [];
-            score = 0;
-            timer = 0;
+            startGame('normal');
         } else if (event.key === '2') {
-            speed = FAST_SPEED;
-            speedInc = FAST_INCREASE;
-            gameState = 'playing';
-            rectangle = new Rectangle();
-            cacti = [];
-            score = 0;
-            timer = 0;
+            startGame('fast');
         } else if (event.key === '3') {
-            speed = ULTRA_FAST_SPEED;
-            speedInc = ULTRA_FAST_INCREASE;
-            gameState = 'playing';
-            rectangle = new Rectangle();
-            cacti = [];
-            score = 0;
-            timer = 0;
+            startGame('ultra');
         } else if (event.key === 'd') {
             darkMode = !darkMode;
             settings.dark_mode = darkMode;
@@ -387,6 +369,55 @@ if (jumpButton) {
         }
     });
 }
+
+// Helper to start a game with a given difficulty
+function startGame(mode) {
+    if (mode === 'normal') {
+        speed = NORMAL_SPEED;
+        speedInc = NORMAL_INCREASE;
+    } else if (mode === 'fast') {
+        speed = FAST_SPEED;
+        speedInc = FAST_INCREASE;
+    } else if (mode === 'ultra') {
+        speed = ULTRA_FAST_SPEED;
+        speedInc = ULTRA_FAST_INCREASE;
+    }
+    gameState = 'playing';
+    rectangle = new Rectangle();
+    cacti = [];
+    score = 0;
+    timer = 0;
+}
+
+// Wire mobile difficulty and restart buttons
+const diffNormal = document.getElementById('diffNormal');
+const diffFast = document.getElementById('diffFast');
+const diffUltra = document.getElementById('diffUltra');
+const restartButton = document.getElementById('restartButton');
+const darkToggleBtn = document.getElementById('darkToggle');
+
+function addClickAndTouch(el, fn) {
+    if (!el) return;
+    el.addEventListener('touchstart', (e) => { e.preventDefault(); fn(e); }, { passive: false });
+    el.addEventListener('click', fn);
+}
+
+addClickAndTouch(diffNormal, () => { if (gameState === 'start') startGame('normal'); });
+addClickAndTouch(diffFast, () => { if (gameState === 'start') startGame('fast'); });
+addClickAndTouch(diffUltra, () => { if (gameState === 'start') startGame('ultra'); });
+
+addClickAndTouch(restartButton, () => {
+    if (gameState === 'gameOver') {
+        gameState = 'start';
+    }
+});
+
+addClickAndTouch(darkToggleBtn, () => {
+    darkMode = !darkMode;
+    settings.dark_mode = darkMode;
+    saveSettings(settings);
+    updateTheme();
+});
 
 // =====================
 // START GAME
