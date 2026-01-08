@@ -258,9 +258,9 @@ function startScreen() {
         'ESC - Quit'
     ];
 
-    // Draw options with slightly tighter spacing so highs can be listed below
+    // Draw options with increased spacing so texts don't look cramped
     const optionsStartY = 120;
-    const optionsSpacing = 30; // reduced from 35
+    const optionsSpacing = 40; // increased spacing for readability
     for (let i = 0; i < options.length; i++) {
         ctx.fillText(options[i], SCREEN_WIDTH / 2, optionsStartY + i * optionsSpacing);
     }
@@ -274,13 +274,13 @@ function startScreen() {
     ctx.textAlign = 'center';
     ctx.font = '18px Arial';
     const lastOptionY = optionsStartY + (options.length - 1) * optionsSpacing;
-    const highStartY = lastOptionY + 22;
+    const highStartY = lastOptionY + 30; // space between options and high score title
     ctx.fillText('Session High Scores', SCREEN_WIDTH / 2, highStartY);
     ctx.font = '16px Arial';
     const hn = highScores.normal || 0;
     const hf = highScores.fast || 0;
     const hu = highScores.ultra || 0;
-    const lineGap = 20;
+    const lineGap = 28; // larger gap between individual high score lines
     ctx.fillText(`Normal: ${hn}`, SCREEN_WIDTH / 2, highStartY + lineGap);
     ctx.fillText(`Fast: ${hf}`, SCREEN_WIDTH / 2, highStartY + lineGap * 2);
     ctx.fillText(`Ultra: ${hu}`, SCREEN_WIDTH / 2, highStartY + lineGap * 3);
