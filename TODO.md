@@ -1,0 +1,10 @@
+- [x] Create index.html with basic HTML structure, canvas element, title, and control instructions
+- [x] Create script.js with constants and initial setup (screen dimensions, physics, difficulties, themes)
+- [x] Implement Rectangle class in JS (player logic)
+- [x] Implement Cactus class in JS (obstacle logic)
+- [x] Implement load_settings and save_settings functions using localStorage
+- [x] Implement fade function for animations
+- [x] Implement start_screen function for difficulty selection
+- [x] Implement main game loop with update and draw logic
+- [x] Add keyboard event listeners for input handling
+- [x] Test the web version locally by opening index.html in a browser
