@@ -27,6 +27,37 @@ const DARK_FG = '#dcdcdc';
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+// Make canvas responsive
+function resizeCanvas() {
+    const maxWidth = Math.min(window.innerWidth - 20, 800);
+    const maxHeight = Math.min(window.innerHeight - 150, 300); // Leave space for instructions and controls
+
+    // Maintain aspect ratio
+    const aspectRatio = 800 / 300;
+    let newWidth = maxWidth;
+    let newHeight = newWidth / aspectRatio;
+
+    if (newHeight > maxHeight) {
+        newHeight = maxHeight;
+        newWidth = newHeight * aspectRatio;
+    }
+
+    canvas.style.width = newWidth + 'px';
+    canvas.style.height = newHeight + 'px';
+
+    // Scale factor for game logic
+    const scaleX = newWidth / 800;
+    const scaleY = newHeight / 300;
+    canvas.scaleFactor = Math.min(scaleX, scaleY);
+}
+
+window.addEventListener('resize', resizeCanvas);
+window.addEventListener('orientationchange', () => {
+    setTimeout(resizeCanvas, 100); // Delay to allow orientation change
+});
+
+resizeCanvas(); // Initial resize
+
 // =====================
 // SAVE / LOAD SETTINGS
 // =====================
@@ -262,6 +293,8 @@ function gameLoop(currentTime) {
 // =====================
 // EVENT LISTENERS
 // =====================
+
+// Keyboard controls
 document.addEventListener('keydown', (event) => {
     if (gameState === 'start') {
         if (event.key === '1') {
@@ -298,6 +331,7 @@ document.addEventListener('keydown', (event) => {
         }
     } else if (gameState === 'playing') {
         if (event.key === ' ' || event.key === 'ArrowUp') {
+            event.preventDefault(); // Prevent page scroll
             rectangle.jump();
         } else if (event.key === 'd') {
             darkMode = !darkMode;
@@ -311,6 +345,48 @@ document.addEventListener('keydown', (event) => {
         }
     }
 });
+
+// Touch controls for mobile
+let touchStartY = 0;
+let isTouching = false;
+
+document.addEventListener('touchstart', (event) => {
+    if (gameState === 'playing') {
+        event.preventDefault();
+        touchStartY = event.touches[0].clientY;
+        isTouching = true;
+        rectangle.jump(); // Jump on touch start
+    }
+}, { passive: false });
+
+document.addEventListener('touchend', (event) => {
+    if (gameState === 'playing') {
+        event.preventDefault();
+        isTouching = false;
+    }
+}, { passive: false });
+
+// Prevent context menu on long press
+document.addEventListener('contextmenu', (event) => {
+    event.preventDefault();
+});
+
+// Jump button for mobile
+const jumpButton = document.getElementById('jumpButton');
+if (jumpButton) {
+    jumpButton.addEventListener('touchstart', (event) => {
+        event.preventDefault();
+        if (gameState === 'playing') {
+            rectangle.jump();
+        }
+    }, { passive: false });
+
+    jumpButton.addEventListener('click', (event) => {
+        if (gameState === 'playing') {
+            rectangle.jump();
+        }
+    });
+}
 
 // =====================
 // START GAME

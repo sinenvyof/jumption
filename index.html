@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Jumption - Web Version</title>
     <style>
         body {
@@ -12,25 +12,76 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             background: #f0f0f0;
             font-family: Arial, sans-serif;
+            touch-action: none; /* Prevent scrolling on touch */
+        }
+        #gameContainer {
+            position: relative;
+            max-width: 100vw;
+            max-height: 100vh;
         }
         canvas {
             border: 2px solid #000;
             background: #fff;
+            max-width: 100%;
+            height: auto;
+            display: block;
         }
         #instructions {
-            margin-top: 20px;
+            margin-top: 10px;
             text-align: center;
-            font-size: 16px;
+            font-size: 14px;
+            padding: 0 10px;
+            max-width: 800px;
+        }
+        #mobileControls {
+            display: none;
+            margin-top: 10px;
+        }
+        #jumpButton {
+            padding: 15px 30px;
+            font-size: 18px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+        #jumpButton:active {
+            background: #45a049;
+        }
+
+        /* Mobile styles */
+        @media (max-width: 768px) {
+            #instructions {
+                font-size: 12px;
+            }
+            #mobileControls {
+                display: block;
+            }
+        }
+
+        @media (max-height: 500px) {
+            #instructions {
+                margin-top: 5px;
+                font-size: 12px;
+            }
         }
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas" width="800" height="300"></canvas>
+    <div id="gameContainer">
+        <canvas id="gameCanvas" width="800" height="300"></canvas>
+    </div>
     <div id="instructions">
-        <p>Use SPACE or UP arrow to jump. Press D to toggle dark mode. Press R to restart after game over.</p>
+        <p>Desktop: Use SPACE or UP arrow to jump. Press D to toggle dark mode. Press R to restart after game over.</p>
+        <p>Mobile: Tap the screen or use the jump button below.</p>
+    </div>
+    <div id="mobileControls">
+        <button id="jumpButton">JUMP</button>
     </div>
     <script src="script.js"></script>
 </body>
