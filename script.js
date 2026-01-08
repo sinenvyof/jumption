@@ -258,8 +258,11 @@ function startScreen() {
         'ESC - Quit'
     ];
 
+    // Draw options with slightly tighter spacing so highs can be listed below
+    const optionsStartY = 120;
+    const optionsSpacing = 30; // reduced from 35
     for (let i = 0; i < options.length; i++) {
-        ctx.fillText(options[i], SCREEN_WIDTH / 2, 120 + i * 35);
+        ctx.fillText(options[i], SCREEN_WIDTH / 2, optionsStartY + i * optionsSpacing);
     }
 
     // Dark mode indicator
@@ -267,15 +270,20 @@ function startScreen() {
     ctx.textAlign = 'left';
     ctx.fillText(indicator, 10, 30);
 
-    // Draw session high scores
+    // Draw session high scores as separate lines (like using <br>) and adjust spacing
     ctx.textAlign = 'center';
     ctx.font = '18px Arial';
-    ctx.fillText('Session High Scores', SCREEN_WIDTH / 2, 260);
+    const lastOptionY = optionsStartY + (options.length - 1) * optionsSpacing;
+    const highStartY = lastOptionY + 22;
+    ctx.fillText('Session High Scores', SCREEN_WIDTH / 2, highStartY);
     ctx.font = '16px Arial';
     const hn = highScores.normal || 0;
     const hf = highScores.fast || 0;
     const hu = highScores.ultra || 0;
-    ctx.fillText(`Normal: ${hn}   Fast: ${hf}   Ultra: ${hu}`, SCREEN_WIDTH / 2, 285);
+    const lineGap = 20;
+    ctx.fillText(`Normal: ${hn}`, SCREEN_WIDTH / 2, highStartY + lineGap);
+    ctx.fillText(`Fast: ${hf}`, SCREEN_WIDTH / 2, highStartY + lineGap * 2);
+    ctx.fillText(`Ultra: ${hu}`, SCREEN_WIDTH / 2, highStartY + lineGap * 3);
 }
 
 // =====================
