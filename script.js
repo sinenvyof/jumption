@@ -255,7 +255,6 @@ function startScreen() {
         '2 - Fast',
         '3 - Ultra Fast',
         'D - Toggle Dark Mode',
-        'ESC - Quit'
     ];
 
     for (let i = 0; i < options.length; i++) {
