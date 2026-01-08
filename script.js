@@ -119,6 +119,29 @@ updateTheme(); // Initial theme set
 // =====================
 // GAME STATE
 // =====================
+// High scores (session-only)
+const HS_KEY = 'jumption_high_scores_session';
+
+function loadHighScores() {
+    const raw = sessionStorage.getItem(HS_KEY);
+    return raw ? JSON.parse(raw) : { normal: 0, fast: 0, ultra: 0 };
+}
+
+function saveHighScores(obj) {
+    try { sessionStorage.setItem(HS_KEY, JSON.stringify(obj)); } catch (e) { /* ignore */ }
+}
+
+let highScores = loadHighScores();
+let currentDifficulty = null; // 'normal' | 'fast' | 'ultra'
+
+function maybeSaveHighScore(difficulty, sc) {
+    if (!difficulty) return;
+    if (!highScores[difficulty] || sc > highScores[difficulty]) {
+        highScores[difficulty] = sc;
+        saveHighScores(highScores);
+    }
+}
+
 let gameState = 'start'; // 'start', 'playing', 'gameOver'
 let speed, speedInc;
 let rectangle;
@@ -243,6 +266,16 @@ function startScreen() {
     const indicator = darkMode ? '🌙 Dark Mode ON' : '☀ Light Mode';
     ctx.textAlign = 'left';
     ctx.fillText(indicator, 10, 30);
+
+    // Draw session high scores
+    ctx.textAlign = 'center';
+    ctx.font = '18px Arial';
+    ctx.fillText('Session High Scores', SCREEN_WIDTH / 2, 260);
+    ctx.font = '16px Arial';
+    const hn = highScores.normal || 0;
+    const hf = highScores.fast || 0;
+    const hu = highScores.ultra || 0;
+    ctx.fillText(`Normal: ${hn}   Fast: ${hf}   Ultra: ${hu}`, SCREEN_WIDTH / 2, 285);
 }
 
 // =====================
@@ -269,7 +302,11 @@ function update(deltaTime) {
                 rectangle.x < cactus.x + cactus.width &&
                 rectangle.y + rectangle.height > cactus.y
             ) {
-                gameState = 'gameOver';
+                // end the run and save high score for this session
+                if (gameState === 'playing') {
+                    gameState = 'gameOver';
+                    maybeSaveHighScore(currentDifficulty, score);
+                }
             }
         });
 
@@ -302,6 +339,12 @@ function draw() {
         ctx.font = '20px Arial';
         ctx.textAlign = 'right';
         ctx.fillText(`Score: ${score}`, SCREEN_WIDTH - 10, 30);
+        // Show session high for current difficulty (if playing)
+        if (currentDifficulty) {
+            const hs = highScores[currentDifficulty] || 0;
+            ctx.font = '16px Arial';
+            ctx.fillText(`High: ${hs}`, SCREEN_WIDTH - 10, 54);
+        }
         ctx.textAlign = 'left';
         ctx.fillText('D = Toggle Dark Mode', 10, SCREEN_HEIGHT - 10);
 
@@ -407,12 +450,15 @@ function startGame(mode) {
     if (mode === 'normal') {
         speed = NORMAL_SPEED;
         speedInc = NORMAL_INCREASE;
+        currentDifficulty = 'normal';
     } else if (mode === 'fast') {
         speed = FAST_SPEED;
         speedInc = FAST_INCREASE;
+        currentDifficulty = 'fast';
     } else if (mode === 'ultra') {
         speed = ULTRA_FAST_SPEED;
         speedInc = ULTRA_FAST_INCREASE;
+        currentDifficulty = 'ultra';
     }
     gameState = 'playing';
     rectangle = new Rectangle();
